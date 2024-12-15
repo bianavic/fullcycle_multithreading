@@ -21,7 +21,7 @@ func main() {
 	// 2- como reduzir o tempo pela metade? acontecer de forma simultanea?
 	go task("A") // Thread 2
 	go task("B") // Thread 3
-
+	// funcao anonima
 	go func() {
 		for i := 0; i < 5; i++ {
 			fmt.Printf("%d: Task %s is running\n", i, "anonymous")
