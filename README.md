@@ -21,3 +21,4 @@ atomic.AddUint64(&number, 1)
 5- Channels
 - Iniciando com Channels
 - Forever
+- For/Range
