@@ -1,34 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 // thread 1
 func main() {
 
 	// canal VAZIO
 	ch := make(chan int)
-	go publish(ch) // cuidado com deadlock, thread morrer enqto tentar ler, pq o reader pode ficar infinito
-	/*
-		o reader permanece em loop quase infinito, sempre aguardando o canal ser preenchido
-		nao roda em background, por isso nao possui go na frente,
-		se tiver, o processo morre antes de rodar
-	*/
-	reader(ch)
-
-	// OPCAO 2: remove a funcao reader(ch)
-	//for x := range ch {
-	//	fmt.Printf("Received %d\n", x)
-	//}
+	wg := sync.WaitGroup{}
+	wg.Add(10) // temos 10 'creditos'
+	go publish(ch)
+	reader(ch, &wg)
+	wg.Wait() // ao finalizar a leitura dos 'çreditos' é avisado que 'wait' terminou
 }
 
 /*
 funcao que le um canal de inteiros
-lê o canal, joga o valor para x e imprime
-assim q le o valor, ele esvazia o canal
+assim q le o valor, esvazia o canal
 */
-func reader(ch chan int) {
+func reader(ch chan int, wg *sync.WaitGroup) {
 	for x := range ch {
 		fmt.Printf("Received %d\n", x)
+		wg.Done() // conforme le, avisa que a iteracao acabou
 	}
 }
 
@@ -41,5 +37,5 @@ func publish(ch chan int) {
 	for i := 0; i < 10; i++ {
 		ch <- i
 	}
-	close(ch) // fecha o canal, indicando que nada mais vai entrar no canal. evitando deadlock qdo concluir o processo i < 10
+	close(ch) // evitar deadlock fechando o canal
 }

@@ -22,3 +22,4 @@ atomic.AddUint64(&number, 1)
 - Iniciando com Channels
 - Forever
 - For/Range
+- Range with WaitGroup
