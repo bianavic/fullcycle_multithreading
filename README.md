@@ -55,3 +55,10 @@ atomic.AddUint64(&number, 1)
   }
   ```
 - Select: escolher o canal que esta pronto para ser lido ou escrito
+- Buffer
+  - faca benchmark para verificar a utilizade do buffer, pq na pratica pode nao fazer diferenca, evitando o desperdicio de recrusos
+  
+  ex: 
+    ```go
+    c := make(chan int, 2) // buffer de 2
+    ```
