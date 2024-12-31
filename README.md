@@ -23,3 +23,16 @@ atomic.AddUint64(&number, 1)
 - Forever
 - For/Range
 - Range with WaitGroup
+- Directions: canais receive-only e send-only
+  - receive-only: direcao de receber informacoes (chan<-)
+  ```go
+    func recebe(nome string, hello chan<- string) {
+    hello <- nome
+    }
+  ```
+    - send-only: direcao de enviar informacoes (<-chan)
+  ```go
+    func ler(data <-chan string) {
+    fmt.Println(data)
+    }
+  ```

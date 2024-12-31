@@ -1,41 +1,41 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-)
+import "fmt"
 
 // thread 1
 func main() {
-
-	// canal VAZIO
-	ch := make(chan int)
-	wg := sync.WaitGroup{}
-	wg.Add(10) // temos 10 'creditos'
-	go publish(ch)
-	reader(ch, &wg)
-	wg.Wait() // ao finalizar a leitura dos 'çreditos' é avisado que 'wait' terminou
+	hello := make(chan string)
+	go recebe("Hello", hello)
+	ler(hello)
 }
 
 /*
-funcao que le um canal de inteiros
-assim q le o valor, esvazia o canal
+RECEIVE-ONLY
+ao executar a funcao estamos:
+
+  - o canal esta recebendo um valor em hello
+
+  - estamos pegando o valor do nome
+
+  - o q tb significa que estamos PUBLICANDO informacoes no nosso canal
+
+    porque a funcao apenas RECEBE dados, podemos setar na assinatura a DIRECAO que o canal tem
+    isso diz que este CANAL ira apenas RECEBER informacao
 */
-func reader(ch chan int, wg *sync.WaitGroup) {
-	for x := range ch {
-		fmt.Printf("Received %d\n", x)
-		wg.Done() // conforme le, avisa que a iteracao acabou
-	}
+func recebe(nome string, hello chan<- string) { // DIRECAO de receber informacoes (seta do lado direito de chan) que o canal tem
+	hello <- nome
 }
 
 /*
-funcao que recebe 1 canal de inteiros
+SEND-ONLY
+funcao que APENAS le dados:
 
-	cada vez que o for roda, faz um i e manda os dados para o canal
+	ela esvazia o canal -
+	 recebe dados
+	 entrega dados
+
+esta DIRECAO é de ESVAZIAR (seta do lado ESQUERDO de chan) -> sua funcao é de entregar resultado
 */
-func publish(ch chan int) {
-	for i := 0; i < 10; i++ {
-		ch <- i
-	}
-	close(ch) // evitar deadlock fechando o canal
+func ler(data <-chan string) {
+	fmt.Println(<-data)
 }
