@@ -54,3 +54,4 @@ atomic.AddUint64(&number, 1)
      }
   }
   ```
+- Select: escolher o canal que esta pronto para ser lido ou escrito
