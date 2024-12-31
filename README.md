@@ -36,3 +36,21 @@ atomic.AddUint64(&number, 1)
     fmt.Println(data)
     }
   ```
+- Load Balancer: balanceamento de carga com workers
+
+    ex: num servidor web
+  - aqui receberiamos as requests
+  ```go
+    for i := 0; i < 100; i++ {
+       data <- i // a var data RECEBE request
+	 }
+  ```
+  - enqto worker PROCESSARIA as requisicoes
+  ```go
+  func worker(workerId int, data chan int) { // PROCESSA as requests
+    for x := range data {
+    println("Worker id %d got %d\n", workerId, x)
+    time.Sleep(time.Second)
+     }
+  }
+  ```
